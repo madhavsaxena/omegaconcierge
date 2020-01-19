@@ -6,6 +6,8 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 	window.et_calculating_scroll_position = false;
 	window.et_side_nav_links_initialized  = false;
 
+	var top_window  = isBuilder ? ET_Builder.Frames.top : window;
+
 	var $et_pb_post_fullwidth = $( '.single.et_pb_pagebuilder_layout.et_full_width_page' ),
 		et_is_mobile_device = navigator.userAgent.match( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/ ),
 		et_is_ipad = navigator.userAgent.match( /iPad/ ),
@@ -248,7 +250,7 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 		function et_change_primary_nav_position( delay ) {
 			setTimeout( function() {
 				var $body = $('body'),
-					$wpadminbar = isBuilder ? window.top.jQuery('#wpadminbar') : $('#wpadminbar'),
+					$wpadminbar = isBuilder ? top_window.jQuery('#wpadminbar') : $('#wpadminbar'),
 					$top_header = $( '#top-header' ),
 					et_primary_header_top = 0;
 
@@ -256,7 +258,7 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 					var adminbarHeight = $wpadminbar.innerHeight();
 
 					// Adjust admin bar height for builder's preview mode zoom since admin bar is rendered on top window
-					if (isBuilder && window.top.jQuery('html').is('.et-fb-preview--zoom:not(.et-fb-preview--desktop)')) {
+					if (isBuilder && top_window.jQuery('html').is('.et-fb-preview--zoom:not(.et-fb-preview--desktop)')) {
 						adminbarHeight = adminbarHeight * 2;
 					}
 
@@ -927,7 +929,7 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 				et_container_actual_width   = !has_container ? 0 : et_container_width_in_pixel ? parseInt( $et_container.width() ) : ( parseInt( (parseInt( $et_container.width() ) / 100).toFixed(0) ) * window_width ), // $et_container.width() doesn't recognize pixel or percentage unit. It's our duty to understand what it returns and convert it properly
 				containerWidthChanged       = $et_container.length && et_container_previous_width !== et_container_actual_width,
 				$slide_menu_container       = $( '.et_slide_in_menu_container' ),
-				$adminbar                   = isBuilder ? window.top.jQuery('#wpadminbar') : $('#wpadminbar'),
+				$adminbar                   = isBuilder ? top_window.jQuery('#wpadminbar') : $('#wpadminbar'),
 				is_rtl                      = $( 'body' ).hasClass( 'rtl' ),
 				page_container_margin;
 
@@ -1682,7 +1684,7 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 		if (isBuilder) {
 			var $menu = jQuery('.et_header_style_fullscreen .et_slide_in_menu_container.et_pb_fullscreen_menu_opened');
 			if ($menu.length > 0) {
-				var height = jQuery(window.top).height();
+				var height = jQuery(top_window).height();
 				// Account for padding
 				height -= parseInt($menu.css('padding-top'), 10);
 				// and AdminBar
@@ -1749,7 +1751,7 @@ var isBuilder = 'object' === typeof window.ET_Builder;
 
   // Override row selector in VB
   $et_window.on('et_fb_init', function() {
-    var wp = window.top.wp;
+    var wp = top_window.wp;
     if (wp && wp.hooks && wp.hooks.addFilter) {
       var replacement = window.DIVI.row_selector;
       wp.hooks.addFilter('et.pb.row.css.selector', 'divi.et.pb.row.css.selector', function(selector) {

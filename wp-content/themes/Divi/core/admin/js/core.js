@@ -11,6 +11,10 @@
 		},
 
 		$selector: function(selector) {
+			if (window.ET_Builder) {
+				return window.ET_Builder.Frames.top.jQuery(selector);
+			}
+
 			return window.top ? window.top.jQuery(selector) : jQuery(selector);
 		},
 
